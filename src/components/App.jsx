@@ -16,6 +16,26 @@ export class App extends React.Component {
     filter: '',
   };
 
+  componentDidMount() {
+    console.log('App componentDidMount');
+
+    const contacts = localStorage.getItem('contacts');
+    const parsedContacts = JSON.parse(contacts);
+
+    if (parsedContacts) {
+      this.setState({ contacts: parsedContacts });
+    }
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    console.log('Add componentDidUpdate');
+
+    if (this.state.contacts !== prevState.contacts) {
+      console.log('Oбновилось поле contacts, записываю contacts в хранилище');
+      localStorage.setItem('contacts', JSON.stringify(this.state.contacts));
+    }
+  }
+
   addContact = ({ name, number }) => {
     const contact = {
       name,
@@ -54,27 +74,6 @@ export class App extends React.Component {
       contact.name.toLowerCase().includes(filter.toLowerCase())
     );
   };
-
-  componentDidMount() {
-    console.log('App componentDidMount')
-
-    const contacts = localStorage.getItem('contacts')  
-    const parsedContacts = JSON.parse(contacts);
-
-    if (parsedContacts) {
-      this.setState({contacts: parsedContacts})
-    }
-  }
-
-  componentDidUpdate(prevProps, prevState) {
-    console.log('Add componentDidUpdate')
-
-    if (this.state.contacts !== prevState.contacts) {
-      console.log('Oбновилось поле contacts, записываю contacts в хранилище');
-
-      localStorage.setItem('contacts', JSON.stringify(this.state.contacts));
-    }
-  }
 
   render() {
     return (
